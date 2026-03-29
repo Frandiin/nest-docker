@@ -11,11 +11,28 @@ async function bootstrap() {
 
   const port = process.env.PORT || 3000;
 
+  // app.enableCors({
+  //   origin: process.env.FRONTEND_URL,
+  //   credentials: true,
+  //   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+  //   allowedHeaders: 'Content-Type, Authorization',
+  // });
   app.enableCors({
-    origin: process.env.FRONTEND_URL,
+    origin: (origin, callback) => {
+      console.log('Origin:', origin);
+
+      if (
+        !origin || // mobile apps, postman, etc
+        origin.includes('localhost') ||
+        origin.includes('vercel.app')
+      ) {
+        callback(null, true);
+      } else {
+        console.log('Blocked by CORS:', origin);
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    allowedHeaders: 'Content-Type, Authorization',
   });
 
   // Validação global
