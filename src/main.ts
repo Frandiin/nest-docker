@@ -8,10 +8,11 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   // Habilitar CORS
-  const frontendUrl = process.env.PROD || 'http://localhost:8080';
+
+  const port = process.env.PORT || 3000;
+  await app.listen(port, '0.0.0.0'); // ESSENCIAL PRA RENDER
   app.enableCors({
-    origin: frontendUrl,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    origin: process.env.FRONTEND_URL,
     credentials: true,
   });
 
