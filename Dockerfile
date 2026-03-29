@@ -13,4 +13,4 @@ RUN npx prisma generate
 
 RUN pnpm build
 
-CMD ["sh", "start.sh"]
+CMD ["sh", "entrypoint.sh"]
