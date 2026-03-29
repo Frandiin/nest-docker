@@ -1,20 +1,14 @@
 #!/bin/sh
 set -e
 
-echo "Waiting for postgres..."
+echo "Running database migrations..."
 
-# extrai host do DATABASE_URL corretamente
-DB_HOST=$(echo $DATABASE_URL | sed -n 's/.*@\([^:]*\):.*/\1/p')
-
-until nc -z $DB_HOST 5432; do
-  echo "Postgres unavailable - sleeping"
-  sleep 2
+# tenta rodar migrations até o banco responder
+until npx prisma migrate deploy; do
+  echo "Database not ready, retrying in 3s..."
+  sleep 3
 done
 
-echo "Postgres is up - running migrations"
-
-npx prisma migrate deploy
-
-echo "Starting app"
+echo "Starting application..."
 
 node dist/main.js
