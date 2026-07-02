@@ -1,342 +1,650 @@
-# Blog API - NestJS + Prisma + Docker
+# Blog API
 
-[![CI/CD Pipeline](https://github.com/seu-usuario/nest-prisma-docker/workflows/CI/CD%20Pipeline/badge.svg)](https://github.com/seu-usuario/nest-prisma-docker/actions)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue)](https://www.typescriptlang.org/)
-[![NestJS](https://img.shields.io/badge/NestJS-11.0-red)](https://nestjs.com/)
-[![Prisma](https://img.shields.io/badge/Prisma-4.16-green)](https://www.prisma.io/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+<p align="center">
+  <img src="./docs/banner.png" alt="Blog API Banner" width="100%" />
+</p>
 
-> API REST completa para gerenciamento de blog com autenticação JWT, sistema de roles e relacionamentos complexos.
+<p align="center">
+  API REST desenvolvida com <strong>NestJS</strong>, <strong>Prisma ORM</strong>, <strong>PostgreSQL</strong> e <strong>Docker</strong>, utilizando autenticação JWT, controle de permissões (RBAC), documentação automática com Swagger e pipeline de CI/CD.
+</p>
 
-## 📋 Sobre o Projeto
+<p align="center">
 
-Este projeto é uma API REST moderna e escalável construída com as melhores práticas do mercado. Simula uma aplicação de blog do mundo real com:
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![NestJS](https://img.shields.io/badge/NestJS-11.x-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)
+![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?style=for-the-badge&logo=prisma)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791?style=for-the-badge&logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![License](https://img.shields.io/github/license/seu-usuario/blog-api?style=for-the-badge)
 
-- Sistema completo de autenticação e autorização
-- CRUD de usuários, posts, categorias e comentários
-- Relacionamentos complexos entre entidades
-- Filtros avançados e paginação
-- Documentação interativa com Swagger
-- CI/CD com GitHub Actions
-- Containerização com Docker
-
-## 🚀 Stack Tecnológica
-
-- **[NestJS](https://nestjs.com/)** - Framework Node.js progressivo
-- **[Prisma](https://www.prisma.io/)** - ORM moderno para TypeScript
-- **[PostgreSQL](https://www.postgresql.org/)** - Banco de dados relacional
-- **[Docker](https://www.docker.com/)** - Containerização
-- **[JWT](https://jwt.io/)** - Autenticação com tokens
-- **[Bcrypt](https://github.com/kelektiv/node.bcrypt.js)** - Hash de senhas
-- **[Passport](http://www.passportjs.org/)** - Middleware de autenticação
-- **[Swagger/OpenAPI](https://swagger.io/)** - Documentação interativa da API
-- **[TypeScript](https://www.typescriptlang.org/)** - Superset tipado do JavaScript
-
-## ✨ Funcionalidades
-
-### Autenticação & Autorização
-
-- ✅ Registro e login de usuários
-- ✅ Autenticação JWT
-- ✅ Sistema de roles (ADMIN e CLIENT)
-- ✅ Guards para proteção de rotas
-- ✅ Validação de permissões
-
-### Blog
-
-- ✅ CRUD completo de posts
-- ✅ Sistema de categorias
-- ✅ Comentários em posts
-- ✅ Filtros avançados (busca, categoria, autor, publicado)
-- ✅ Paginação de resultados
-- ✅ Geração automática de slugs
-- ✅ Permissões por autor
-
-### Infraestrutura
-
-- ✅ Documentação Swagger interativa
-- ✅ Migrations do Prisma
-- ✅ Seeds de dados para desenvolvimento
-- ✅ Docker Compose para ambiente completo
-- ✅ CI/CD com GitHub Actions
-- ✅ Validação de dados com class-validator
-
-## 📊 Modelo de Dados
-
-```
-User (Usuário)
-├── Posts (1:N)
-└── Comments (1:N)
-
-Category (Categoria)
-└── Posts (1:N)
-
-Post (Post)
-├── Author (N:1) → User
-├── Category (N:1) → Category
-└── Comments (1:N)
-
-Comment (Comentário)
-├── Post (N:1) → Post
-└── Author (N:1) → User
-```
-
-## 🏁 Início Rápido
-
-### Pré-requisitos
-
-- [Docker](https://www.docker.com/get-started) e [Docker Compose](https://docs.docker.com/compose/)
-- [Node.js 20+](https://nodejs.org/) (opcional, para desenvolvimento local)
-- [pnpm](https://pnpm.io/) (opcional)
-
-### Instalação e Execução
-
-1. **Clone o repositório**
-
-```bash
-git clone https://github.com/seu-usuario/nest-prisma-docker.git
-cd nest-prisma-docker
-```
-
-2. **Configure as variáveis de ambiente**
-
-```bash
-cp .env.example .env
-# Edite o .env com suas configurações
-```
-
-3. **Inicie com Docker**
-
-```bash
-# Inicia todos os containers
-docker-compose up -d
-
-# Aplica as migrations
-docker-compose exec app pnpm prisma migrate deploy
-
-# Gera o Prisma Client
-docker-compose exec app pnpm prisma generate
-
-# Popula o banco com dados de teste
-docker-compose exec app pnpm prisma:seed
-```
-
-4. **Acesse a aplicação**
-
-- API: http://localhost:3000
-- Swagger: http://localhost:3000/api
-
-### Credenciais de Teste (após seed)
-
-- **Admin:** `admin@example.com` / `admin123`
-- **User:** `user@example.com` / `user123`
-
-## 📚 Documentação da API
-
-Acesse a documentação interativa completa em: **http://localhost:3000/api**
-
-### Principais Endpoints
-
-#### Autenticação
-
-```http
-POST   /auth/register      # Registrar novo usuário
-POST   /auth/login         # Fazer login
-GET    /auth/profile       # Obter perfil (autenticado)
-GET    /auth/admin-only    # Rota exclusiva admin
-```
-
-#### Posts
-
-```http
-GET    /posts              # Listar posts (com filtros)
-GET    /posts/:id          # Obter post por ID
-GET    /posts/slug/:slug   # Obter post por slug
-POST   /posts              # Criar post (autenticado)
-PUT  /posts/:id          # Atualizar post (autor ou admin)
-DELETE /posts/:id          # Deletar post (autor ou admin)
-```
-
-#### Categorias
-
-```http
-GET    /categories         # Listar categorias
-GET    /categories/:id     # Obter categoria
-POST   /categories         # Criar categoria (admin)
-PUT  /categories/:id     # Atualizar categoria (admin)
-DELETE /categories/:id     # Deletar categoria (admin)
-```
-
-#### Usuários
-
-```http
-GET    /users              # Listar usuários
-GET    /users/:id          # Obter usuário
-POST   /users              # Criar usuário
-PUT  /users/:id          # Atualizar usuário
-DELETE /users/:id          # Deletar usuário
-```
-
-### Filtros Avançados
-
-Exemplo de busca em posts:
-
-```http
-GET /posts?search=nestjs&published=true&categoryId=1&page=1&limit=10
-```
-
-## 🔧 Desenvolvimento
-
-### Estrutura do Projeto
-
-```
-src/
-├── auth/               # Autenticação e autorização
-│   ├── decorators/     # @Roles()
-│   ├── dto/            # DTOs de auth
-│   ├── enums/          # Role enum
-│   ├── guards/         # JWT e Roles guards
-│   └── strategies/     # JWT strategy
-├── posts/              # Módulo de posts
-│   ├── dto/            # DTOs de posts
-│   ├── posts.controller.ts
-|   ├── posts.controller.ts
-│   └── posts.module.ts
-├── categories/         # Módulo de categorias
-├── user/               # Módulo de usuários
-├── prisma/             # Configuração do Prisma
-└── common/             # Utilitários compartilhados
-```
-
-### Scripts Disponíveis
-
-```bash
-# Desenvolvimento
-pnpm start:dev          # Inicia em modo watch
-pnpm start:debug        # Inicia com debugger
-
-# Build
-pnpm build              # Compila o projeto
-pnpm start:prod         # Inicia em produção
-
-# Testes
-pnpm test               # Testes unitários
-pnpm test:watch         # Testes em modo watch
-pnpm test:cov           # Cobertura de testes
-pnpm test:e2e           # Testes end-to-end
-
-# Linting & Formatação
-pnpm lint               # ESLint
-pnpm format             # Prettier
-
-# Prisma
-pnpm prisma:generate    # Gera Prisma Client
-pnpm prisma:migrate:dev # Cria e aplica migration
-pnpm prisma:seed        # Popula banco com dados
-pnpm prisma:studio      # Abre Prisma Studio
-```
-
-### Docker
-
-```bash
-# Ver logs
-docker-compose logs app -f
-
-# Executar comandos no container
-docker-compose exec app <comando>
-
-# Reiniciar aplicação
-docker-compose restart app
-
-# Parar containers
-docker-compose down
-
-# Rebuild
-docker-compose up -d --build
-```
-
-## 🧪 Testando no Swagger
-
-1. Acesse http://localhost:3000/api
-2. Faça login através do endpoint `/auth/login`
-3. Copie o `access_token` da resposta
-4. Clique em **"Authorize"** no topo da página
-5. Cole o token e clique em **"Authorize"**
-6. Agora você pode testar as rotas protegidas!
-
-## 🔐 Sistema de Roles
-
-### Protegendo Rotas
-
-```typescript
-import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
-import { RolesGuard } from './auth/guards/roles.guard';
-import { Roles } from './auth/decorators/roles.decorator';
-import { Role } from './auth/enums/role.enum';
-
-// Apenas ADMIN
-@UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(Role.ADMIN)
-@Delete(':id')
-delete() { }
-
-// Qualquer usuário autenticado
-@UseGuards(JwtAuthGuard)
-@Get('profile')
-getProfile() { }
-```
-
-## 🚢 Deploy
-
-### Variáveis de Ambiente para Produção
-
-```env
-DATABASE_URL="postgresql://user:pass@host:5432/db"
-JWT_SECRET="minha-chave-super-secreta-aleatoria"
-NODE_ENV="production"
-PORT=3000
-```
-
-**⚠️ IMPORTANTE:** Altere o `JWT_SECRET` para uma chave segura e aleatória em produção!
-
-### Docker em Produção
-
-```bash
-# Build da imagem
-docker build -t blog-api .
-
-# Executar container
-docker run -p 3000:3000 \
-  -e DATABASE_URL="..." \
-  -e JWT_SECRET="..." \
-  blog-api
-```
-
-## 📝 Documentação Adicional
-
-- [Swagger UI](http://localhost:3000/api) - Documentação interativa
-- [Prisma Docs](https://www.prisma.io/docs/) - Documentação do Prisma
-- [NestJS Docs](https://docs.nestjs.com/) - Documentação do NestJS
-
-## 🔒 Segurança
-
-- Senhas hasheadas com bcrypt (salt rounds: 10)
-- Tokens JWT com expiração configurável
-- Validação de dados em todas as requisições
-- Proteção contra SQL injection via Prisma
-- CORS configurável
-
-## ⭐ Recursos Adicionais
-
-- **CI/CD:** GitHub Actions configurado para testes e build automático
-- **Seeds:** Dados de exemplo para desenvolvimento
-- **TypeScript:** Totalmente tipado para melhor DX
-- **Validação:** class-validator em todos os DTOs
-- **Documentação:** Swagger completo e atualizado
+</p>
 
 ---
 
-Feito com ❤️ usando NestJS e Prisma
-#   n e s t - d o c k e r  
- 
+# 📖 Índice
+
+- [Sobre](#-sobre)
+- [Demonstração](#-demonstração)
+- [Tecnologias](#-tecnologias)
+- [Arquitetura](#-arquitetura)
+- [Modelo de Dados](#-modelo-de-dados)
+- [Funcionalidades](#-funcionalidades)
+- [Estrutura do Projeto](#-estrutura-do-projeto)
+- [Instalação](#-instalação)
+- [Variáveis de Ambiente](#-variáveis-de-ambiente)
+- [Docker](#-docker)
+- [Swagger](#-swagger)
+- [Scripts](#-scripts)
+- [Deploy](#-deploy)
+- [CI/CD](#-cicd)
+- [Segurança](#-segurança)
+- [Roadmap](#-roadmap)
+- [Licença](#-licença)
+
+---
+
+# 📌 Sobre
+
+Esta API simula um sistema completo de gerenciamento de blog utilizando as principais tecnologias do ecossistema Node.js.
+
+O projeto foi desenvolvido seguindo boas práticas de arquitetura, separação de responsabilidades, validação de dados, autenticação JWT e containerização com Docker.
+
+Entre os principais recursos estão:
+
+- Autenticação JWT
+- Controle de acesso por Roles (RBAC)
+- CRUD completo
+- Paginação
+- Filtros
+- Relacionamentos complexos
+- Prisma ORM
+- Swagger
+- Docker
+- CI/CD
+
+---
+
+# 🎥 Demonstração
+
+## Swagger
+
+> Substitua pela imagem do seu projeto.
+
+<p align="center">
+<img src="./docs/swagger.png" width="900">
+</p>
+
+---
+
+# 🚀 Tecnologias
+
+## Backend
+
+- NestJS
+- TypeScript
+- Prisma ORM
+- PostgreSQL
+- Docker
+
+## Autenticação
+
+- JWT
+- Passport
+- Bcrypt
+
+## Documentação
+
+- Swagger / OpenAPI
+
+## Qualidade
+
+- ESLint
+- Prettier
+- Class Validator
+- Class Transformer
+
+## DevOps
+
+- Docker
+- Docker Compose
+- GitHub Actions
+
+---
+
+# 🏗 Arquitetura
+
+```text
+                Client
+
+                   │
+
+                   ▼
+
+            NestJS Controllers
+
+                   │
+
+                   ▼
+
+            NestJS Services
+
+                   │
+
+                   ▼
+
+               Prisma ORM
+
+                   │
+
+                   ▼
+
+              PostgreSQL
+```
+
+---
+
+# 🗄 Modelo de Dados
+
+```text
+User
+├── Posts (1:N)
+└── Comments (1:N)
+
+Category
+└── Posts (1:N)
+
+Post
+├── User (N:1)
+├── Category (N:1)
+└── Comments (1:N)
+
+Comment
+├── User (N:1)
+└── Post (N:1)
+```
+
+---
+
+# ✨ Funcionalidades
+
+## 🔐 Autenticação
+
+- Cadastro de usuários
+- Login
+- JWT
+- Hash de senha
+- Guards
+- Roles
+- Perfil do usuário
+
+---
+
+## 👤 Usuários
+
+- Criar usuário
+- Listar usuários
+- Buscar usuário
+- Atualizar usuário
+- Remover usuário
+
+---
+
+## 📝 Posts
+
+- Criar post
+- Atualizar post
+- Remover post
+- Buscar por slug
+- Buscar por ID
+- Paginação
+- Pesquisa
+- Filtro por categoria
+- Filtro por autor
+- Filtro por publicação
+
+---
+
+## 📂 Categorias
+
+- CRUD completo
+
+---
+
+## 💬 Comentários
+
+- CRUD completo
+
+---
+
+## 📚 Documentação
+
+- Swagger automático
+
+---
+
+## 🐳 Docker
+
+- API
+- PostgreSQL
+- Docker Compose
+
+---
+
+## ⚙️ Infraestrutura
+
+- Prisma Migrations
+- Prisma Seed
+- CI/CD
+- ESLint
+- Prettier
+
+---
+
+# 📁 Estrutura do Projeto
+
+```text
+src
+├── auth
+│   ├── decorators
+│   ├── dto
+│   ├── enums
+│   ├── guards
+│   ├── strategies
+│   ├── auth.controller.ts
+│   ├── auth.service.ts
+│   └── auth.module.ts
+│
+├── users
+│
+├── posts
+│
+├── comments
+│
+├── categories
+│
+├── prisma
+│
+├── common
+│
+├── app.module.ts
+└── main.ts
+```
+
+---
+
+# 🚀 Instalação
+
+## Clonar projeto
+
+```bash
+git clone https://github.com/seu-usuario/blog-api.git
+
+cd blog-api
+```
+
+---
+
+## Instalar dependências
+
+```bash
+pnpm install
+```
+
+---
+
+## Configurar ambiente
+
+```bash
+cp .env.example .env
+```
+
+---
+
+## Executar Docker
+
+```bash
+docker compose up -d
+```
+
+---
+
+## Gerar Prisma Client
+
+```bash
+pnpm prisma generate
+```
+
+---
+
+## Executar migrations
+
+```bash
+pnpm prisma migrate deploy
+```
+
+---
+
+## Popular banco
+
+```bash
+pnpm prisma db seed
+```
+
+---
+
+## Executar aplicação
+
+```bash
+pnpm start:dev
+```
+
+---
+
+# 🔧 Variáveis de Ambiente
+
+```env
+DATABASE_URL=
+
+JWT_SECRET=
+
+PORT=3000
+
+NODE_ENV=development
+```
+
+---
+
+# 🐳 Docker
+
+Subir containers
+
+```bash
+docker compose up -d
+```
+
+Ver logs
+
+```bash
+docker compose logs -f
+```
+
+Parar containers
+
+```bash
+docker compose down
+```
+
+Rebuild
+
+```bash
+docker compose up -d --build
+```
+
+Entrar no container
+
+```bash
+docker compose exec app sh
+```
+
+---
+
+# 📖 Swagger
+
+Após iniciar a aplicação:
+
+```
+http://localhost:3000/api
+```
+
+---
+
+# 📌 Principais Endpoints
+
+## Auth
+
+```http
+POST /auth/register
+
+POST /auth/login
+
+GET /auth/profile
+```
+
+---
+
+## Users
+
+```http
+GET /users
+
+GET /users/:id
+
+POST /users
+
+PATCH /users/:id
+
+DELETE /users/:id
+```
+
+---
+
+## Posts
+
+```http
+GET /posts
+
+GET /posts/:id
+
+GET /posts/slug/:slug
+
+POST /posts
+
+PATCH /posts/:id
+
+DELETE /posts/:id
+```
+
+---
+
+## Categories
+
+```http
+GET /categories
+
+POST /categories
+
+PATCH /categories/:id
+
+DELETE /categories/:id
+```
+
+---
+
+## Comments
+
+```http
+GET /comments
+
+POST /comments
+
+PATCH /comments/:id
+
+DELETE /comments/:id
+```
+
+---
+
+# 📜 Scripts
+
+## Desenvolvimento
+
+```bash
+pnpm start:dev
+
+pnpm start:debug
+```
+
+---
+
+## Produção
+
+```bash
+pnpm build
+
+pnpm start:prod
+```
+
+---
+
+## Testes
+
+```bash
+pnpm test
+
+pnpm test:e2e
+
+pnpm test:watch
+
+pnpm test:cov
+```
+
+---
+
+## Prisma
+
+```bash
+pnpm prisma generate
+
+pnpm prisma migrate dev
+
+pnpm prisma migrate deploy
+
+pnpm prisma db seed
+
+pnpm prisma studio
+```
+
+---
+
+## Qualidade
+
+```bash
+pnpm lint
+
+pnpm format
+```
+
+---
+
+# 🚀 Deploy
+
+Pode ser executado em:
+
+- Render
+- Railway
+- Fly.io
+- DigitalOcean
+- AWS
+- Azure
+
+### Build Docker
+
+```bash
+docker build -t blog-api .
+```
+
+Executar
+
+```bash
+docker run \
+-p 3000:3000 \
+-e DATABASE_URL=... \
+-e JWT_SECRET=... \
+blog-api
+```
+
+---
+
+# 🔄 CI/CD
+
+Pipeline automatizada para:
+
+- Instalação das dependências
+- Lint
+- Build
+- Testes
+- Deploy
+
+---
+
+# 🔒 Segurança
+
+- JWT Authentication
+- Password Hash (bcrypt)
+- Role Based Access Control
+- DTO Validation
+- Guards
+- Prisma ORM
+- Proteção contra SQL Injection
+- Validação automática de requisições
+
+---
+
+# 🛣 Roadmap
+
+- [x] Autenticação JWT
+- [x] CRUD Usuários
+- [x] CRUD Posts
+- [x] CRUD Categorias
+- [x] CRUD Comentários
+- [x] Swagger
+- [x] Docker
+- [x] Prisma
+- [x] Seed
+- [x] CI/CD
+- [ ] Refresh Token
+- [ ] Upload de Imagens
+- [ ] Cache com Redis
+- [ ] Testes E2E completos
+- [ ] Observabilidade
+- [ ] Rate Limiting
+
+---
+
+# 🤝 Contribuindo
+
+1. Faça um Fork
+
+2. Crie uma branch
+
+```bash
+git checkout -b feature/nova-feature
+```
+
+3. Commit
+
+```bash
+git commit -m "feat: nova funcionalidade"
+```
+
+4. Push
+
+```bash
+git push origin feature/nova-feature
+```
+
+5. Abra um Pull Request.
+
+---
+
+# 📄 Licença
+
+Este projeto está licenciado sob a licença **MIT**.
+
+---
+
+<p align="center">
+
+Desenvolvido com ❤️ utilizando **NestJS**, **Prisma ORM**, **PostgreSQL** e **Docker**.
+
+</p>
