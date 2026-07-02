@@ -1,8 +1,5 @@
 # Blog API
 
-<p align="center">
-  <img src="./docs/banner.png" alt="Blog API Banner" width="100%" />
-</p>
 
 <p align="center">
   API REST desenvolvida com <strong>NestJS</strong>, <strong>Prisma ORM</strong>, <strong>PostgreSQL</strong> e <strong>Docker</strong>, utilizando autenticação JWT, controle de permissões (RBAC), documentação automática com Swagger e pipeline de CI/CD.
