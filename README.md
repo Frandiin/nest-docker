@@ -21,7 +21,6 @@
 # 📖 Índice
 
 - [Sobre](#-sobre)
-- [Demonstração](#-demonstração)
 - [Tecnologias](#-tecnologias)
 - [Arquitetura](#-arquitetura)
 - [Modelo de Dados](#-modelo-de-dados)
@@ -59,17 +58,6 @@ Entre os principais recursos estão:
 - Docker
 - CI/CD
 
----
-
-# 🎥 Demonstração
-
-## Swagger
-
-> Substitua pela imagem do seu projeto.
-
-<p align="center">
-<img src="./docs/swagger.png" width="900">
-</p>
 
 ---
 
